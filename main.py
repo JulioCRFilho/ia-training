@@ -36,7 +36,7 @@ try:
     print("Modelo carregado com sucesso!")
 except:
     print("Modelo não encontrado. Criando um novo do zero...")
-    modelo = PPO("MlpPolicy", env, verbose=0)
+    modelo = PPO("MlpPolicy", env, verbose=0, ent_coef=config.ENTROPY_COEFFICIENT)
 
 
 print("Iniciando o treinamento (assista a IA errando bastante)...")

@@ -14,7 +14,7 @@ if os.path.exists(f"{config.NOME_DO_ARQUIVO_MODELO}.zip"):
     modelo = PPO.load(config.NOME_DO_ARQUIVO_MODELO, env=env, verbose=1) 
 else:
     print(f"Criando IA para treinar em {config.NUMERO_DE_NUCLEOS} mundos paralelos...")
-    modelo = PPO("MlpPolicy", env, verbose=1)
+    modelo = PPO("MlpPolicy", env, verbose=1, ent_coef=config.ENTROPY_COEFFICIENT)
 
 # --- 3. O TREINAMENTO PARALELO ---
 print(f"Iniciando treinamento paralelo de {config.PASSOS_TREINO_RAPIDO} passos...")

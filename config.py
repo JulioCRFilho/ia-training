@@ -10,8 +10,10 @@ NOME_DO_JOGO = "BipedalWalker-v3"
 NOME_DO_ARQUIVO_MODELO = "BipedalWalker-v3-Cerebro"
 
 # --- Configurações do Treino Rápido (fast.py) ---
-NUMERO_DE_NUCLEOS = 8        # Quantos mundos rodar em paralelo
+NUMERO_DE_NUCLEOS = 6        # Quantos mundos rodar em paralelo
 PASSOS_TREINO_RAPIDO = 1_000_000 
 
 # --- Configurações do Treino Visual (main.py) ---
 PASSOS_TREINO_VISUAL = 10_000
+
+ENTROPY_COEFFICIENT = 0.01
