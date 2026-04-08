@@ -11,7 +11,7 @@ NOME_DO_ARQUIVO_MODELO = "BipedalWalker-v3-Cerebro"
 
 # --- Configurações do Treino Rápido (fast.py) ---
 NUMERO_DE_NUCLEOS = 6        # Quantos mundos rodar em paralelo
-PASSOS_TREINO_RAPIDO = 10_000_000 
+PASSOS_TREINO_RAPIDO = 1_000_000 
 
 # --- Configurações do Treino Visual (main.py) ---
 PASSOS_TREINO_VISUAL = 1_000
