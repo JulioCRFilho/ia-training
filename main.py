@@ -35,17 +35,18 @@ class CallbackDeTela(BaseCallback):
 
 # --- 2. O AMBIENTE ---
 # Alteramos de "human" para "rgb_array" para podermos manipular a imagem
-env = gym.make("CartPole-v1", render_mode="rgb_array")
+env = gym.make("LunarLander-v3", render_mode="rgb_array")
 
 # --- 3. O CÉREBRO ---
-modelo = PPO.load("meu_cerebro_cartpole", env=env, verbose=0)
+# modelo = PPO("MlpPolicy", env, verbose=0)
+modelo = PPO.load("LunarLander-v3", env=env, verbose=0)
 
 print("Iniciando o treinamento (assista a IA errando bastante)...")
 
 # Passamos nosso Callback para o modelo usar enquanto treina
 callback_tela = CallbackDeTela()
 modelo.learn(total_timesteps=10000, callback=callback_tela)
-modelo.save("meu_cerebro_cartpole")
+modelo.save("LunarLander-v3")
 
 print("Treinamento concluído! Agora assista a IA jogando a sério.")
 
