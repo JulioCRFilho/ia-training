@@ -38,7 +38,7 @@ class CallbackDeTela(BaseCallback):
 env = gym.make("CartPole-v1", render_mode="rgb_array")
 
 # --- 3. O CÉREBRO ---
-modelo = PPO("MlpPolicy", env, verbose=0) # verbose=0 para limpar o console
+modelo = PPO.load("meu_cerebro_cartpole", env=env, verbose=0)
 
 print("Iniciando o treinamento (assista a IA errando bastante)...")
 
