@@ -3,50 +3,50 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import BaseCallback
 import cv2
 
-# --- 1. CRIANDO O CALLBACK (O Interceptador para desenhar na tela) ---
+# Importamos a nossa central de comando!
+import config
+
+# --- 1. CRIANDO O CALLBACK (Mantido igual) ---
 class CallbackDeTela(BaseCallback):
     def __init__(self, verbose=0):
         super().__init__(verbose)
-        self.tentativa = 1 # Variável de controle de tentativa
+        self.tentativa = 1
 
     def _on_step(self) -> bool:
-        # Pega o ambiente do jogo
         env = self.training_env.envs[0]
-        
-        # O SB3 avisa quando o episódio termina (o bastão caiu), então somamos 1 na tentativa
         if self.locals["dones"][0]:
             self.tentativa += 1
             
-        # Pega a "foto" atual do jogo
         frame = env.render()
-        
-        # O Gym usa cores no formato RGB, mas o OpenCV usa BGR. Precisamos converter:
         frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-        
-        # Prepara o texto (Texto, posição X e Y, fonte, escala, cor BGR, espessura)
         texto = f"Treinando IA - Tentativa: {self.tentativa}"
         cv2.putText(frame_bgr, texto, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
-        
-        # Exibe a imagem numa janela
         cv2.imshow("Jogo da IA", frame_bgr)
-        cv2.waitKey(1) # Atualiza a tela super rápido
-        
+        cv2.waitKey(1)
         return True
 
 # --- 2. O AMBIENTE ---
-# Alteramos de "human" para "rgb_array" para podermos manipular a imagem
-env = gym.make("BipedalWalker-v3", render_mode="rgb_array")
+env = gym.make(config.NOME_DO_JOGO, render_mode="rgb_array")
 
 # --- 3. O CÉREBRO ---
-modelo = PPO("MlpPolicy", env, verbose=0)
-# modelo = PPO.load("BipedalWalker-v3", env=env, verbose=0)
+# Tentamos carregar o arquivo definido no config. Se não existir, ele vai dar erro, 
+# pois no modo visual assumimos que você já treinou ou quer continuar treinando um existente.
+try:
+    modelo = PPO.load(config.NOME_DO_ARQUIVO_MODELO, env=env, verbose=0)
+    print("Modelo carregado com sucesso!")
+except:
+    print("Modelo não encontrado. Criando um novo do zero...")
+    modelo = PPO("MlpPolicy", env, verbose=0)
+
 
 print("Iniciando o treinamento (assista a IA errando bastante)...")
-
-# Passamos nosso Callback para o modelo usar enquanto treina
 callback_tela = CallbackDeTela()
-modelo.learn(total_timesteps=10000, callback=callback_tela)
-modelo.save("BipedalWalker-v3")
+
+# Usamos os passos do config
+modelo.learn(total_timesteps=config.PASSOS_TREINO_VISUAL, callback=callback_tela)
+
+# Salvamos usando o nome do config
+modelo.save(config.NOME_DO_ARQUIVO_MODELO)
 
 print("Treinamento concluído! Agora assista a IA jogando a sério.")
 
@@ -54,23 +54,21 @@ print("Treinamento concluído! Agora assista a IA jogando a sério.")
 estado_atual, info = env.reset()
 tentativa_teste = 1
 
-for i in range(1000): # Roda 1000 quadros de animação
+for i in range(1000): 
     acao, _ = modelo.predict(estado_atual) 
     estado_atual, recompensa, bateu, truncou, info = env.step(acao)
 
-    # Pegamos a imagem e desenhamos na tela igual fizemos no Callback
     frame = env.render()
     frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     texto = f"TESTE FINAL - Tentativa: {tentativa_teste}"
     cv2.putText(frame_bgr, texto, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
     
     cv2.imshow("Jogo da IA", frame_bgr)
-    cv2.waitKey(20) # 20 milissegundos para ficar numa velocidade assistível
+    cv2.waitKey(20) 
 
     if bateu or truncou:
         estado_atual, info = env.reset()
         tentativa_teste += 1
 
-# Fecha o ambiente e fecha as janelas do OpenCV
 env.close()
 cv2.destroyAllWindows()
