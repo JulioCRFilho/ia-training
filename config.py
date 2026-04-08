@@ -4,10 +4,10 @@
 # ==========================================
 
 # Nome do ambiente (jogo) no Gymnasium
-NOME_DO_JOGO = "BipedalWalker-v3"
+NOME_DO_JOGO = "CarRacing-v3"
 
 # Nome do arquivo onde o cérebro (modelo) será salvo/carregado
-NOME_DO_ARQUIVO_MODELO = "BipedalWalker-v3-Cerebro"
+NOME_DO_ARQUIVO_MODELO = NOME_DO_JOGO
 
 # --- Configurações do Treino Rápido (fast.py) ---
 NUMERO_DE_NUCLEOS = 6        # Quantos mundos rodar em paralelo
