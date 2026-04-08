@@ -45,6 +45,7 @@ print("Iniciando o treinamento (assista a IA errando bastante)...")
 # Passamos nosso Callback para o modelo usar enquanto treina
 callback_tela = CallbackDeTela()
 modelo.learn(total_timesteps=10000, callback=callback_tela)
+modelo.save("meu_cerebro_cartpole")
 
 print("Treinamento concluído! Agora assista a IA jogando a sério.")
 
