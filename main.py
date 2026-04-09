@@ -1,26 +1,9 @@
-import ale_py
 import gymnasium as gym
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import BaseCallback
 import cv2
-import sys
 import signal
-
-
-# Importamos a nossa central de comando!
 import config
-
-# Isso registra manualmente os jogos do Atari no Gymnasium
-gym.register_envs(ale_py)
-
-# --- 3. MECANISMO DE SALVAMENTO DE EMERGÊNCIA (Ctrl + C) ---
-def salvar_e_sair(sig, frame):
-    print("\n\n[INTERRUPÇÃO DETECTADA]")
-    print(f"Salvando o progresso atual em '{config.NOME_DO_ARQUIVO_MODELO}.zip'...")
-    modelo.save(config.NOME_DO_ARQUIVO_MODELO)
-    print("Modelo salvo com sucesso! Saindo agora...")
-    env.close()
-    sys.exit(0)
 
 # --- 1. CRIANDO O CALLBACK (Mantido igual) ---
 class CallbackDeTela(BaseCallback):
@@ -36,7 +19,7 @@ class CallbackDeTela(BaseCallback):
         frame = env.render()
         frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
         texto = f"Treinando IA - Tentativa: {self.tentativa}"
-        # cv2.putText(frame_bgr, texto, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+        cv2.putText(frame_bgr, texto, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
         cv2.imshow("Jogo da IA", frame_bgr)
         cv2.waitKey(1)
         return True
@@ -44,22 +27,10 @@ class CallbackDeTela(BaseCallback):
 # --- 2. O AMBIENTE ---
 env = gym.make(config.NOME_DO_JOGO, render_mode="rgb_array")
 
-# --- 3. O CÉREBRO ---
-# Tentamos carregar o arquivo definido no config. Se não existir, ele vai dar erro, 
-# pois no modo visual assumimos que você já treinou ou quer continuar treinando um existente.
-try:
-    modelo = PPO.load(config.NOME_DO_ARQUIVO_MODELO, env=env, verbose=0)
-    print("Modelo carregado com sucesso!")
-except:
-    print("Modelo não encontrado. Criando um novo do zero...")
-    modelo = PPO(config.NOME_MODELO, env, verbose=0, ent_coef=config.ENTROPY_COEFFICIENT)
-
+modelo = config.setup(env)
 
 print("Iniciando o treinamento (assista a IA errando bastante)...")
 callback_tela = CallbackDeTela()
-
-# Dizemos ao Python para chamar a nossa função quando o Ctrl+C for pressionado
-signal.signal(signal.SIGINT, salvar_e_sair)
 
 # Usamos os passos do config
 modelo.learn(total_timesteps=config.PASSOS_TREINO_VISUAL, callback=callback_tela)
