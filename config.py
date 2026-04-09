@@ -8,6 +8,7 @@ NOME_DO_JOGO = "ALE/MsPacman-v5"
 
 # Nome do arquivo onde o cérebro (modelo) será salvo/carregado
 NOME_DO_ARQUIVO_MODELO = NOME_DO_JOGO
+NOME_MODELO = "CnnPolicy"
 
 # --- Configurações do Treino Rápido (fast.py) ---
 NUMERO_DE_NUCLEOS = 4        # Quantos mundos rodar em paralelo

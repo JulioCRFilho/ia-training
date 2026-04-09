@@ -15,7 +15,7 @@ if os.path.exists(f"{config.NOME_DO_ARQUIVO_MODELO}.zip"):
     modelo = PPO.load(config.NOME_DO_ARQUIVO_MODELO, env=env, verbose=1) 
 else:
     print(f"Criando IA do zero para {config.NOME_DO_JOGO}...")
-    modelo = PPO("CnnPolicy", env, verbose=1) # CarRacing usa CnnPolicy por causa das imagens
+    modelo = PPO(config.NOME_MODELO, env, verbose=1) # CarRacing usa CnnPolicy por causa das imagens
 
 # --- 3. MECANISMO DE SALVAMENTO DE EMERGÊNCIA (Ctrl + C) ---
 def salvar_e_sair(sig, frame):
