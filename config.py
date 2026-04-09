@@ -12,7 +12,7 @@ NOME_MODELO = "CnnPolicy"
 
 # --- Configurações do Treino Rápido (fast.py) ---
 NUMERO_DE_NUCLEOS = 4        # Quantos mundos rodar em paralelo
-PASSOS_TREINO_RAPIDO = 1_000_000 
+PASSOS_TREINO_RAPIDO = 100_000 
 
 # --- Configurações do Treino Visual (main.py) ---
 PASSOS_TREINO_VISUAL = 1_000

@@ -5,6 +5,11 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
 
 import config
+import ale_py
+import gymnasium as gym
+
+# Isso registra manualmente os jogos do Atari no Gymnasium
+gym.register_envs(ale_py)
 
 # --- 1. CONFIGURAÇÃO DO AMBIENTE ---
 env = make_vec_env(config.NOME_DO_JOGO, n_envs=config.NUMERO_DE_NUCLEOS)

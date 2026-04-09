@@ -36,7 +36,7 @@ class CallbackDeTela(BaseCallback):
         frame = env.render()
         frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
         texto = f"Treinando IA - Tentativa: {self.tentativa}"
-        cv2.putText(frame_bgr, texto, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+        # cv2.putText(frame_bgr, texto, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
         cv2.imshow("Jogo da IA", frame_bgr)
         cv2.waitKey(1)
         return True
