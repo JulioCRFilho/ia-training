@@ -1,3 +1,4 @@
+import ale_py
 import gymnasium as gym
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import BaseCallback
@@ -5,6 +6,9 @@ import cv2
 
 # Importamos a nossa central de comando!
 import config
+
+# Isso registra manualmente os jogos do Atari no Gymnasium
+gym.register_envs(ale_py)
 
 # --- 1. CRIANDO O CALLBACK (Mantido igual) ---
 class CallbackDeTela(BaseCallback):
@@ -36,7 +40,7 @@ try:
     print("Modelo carregado com sucesso!")
 except:
     print("Modelo não encontrado. Criando um novo do zero...")
-    modelo = PPO("MlpPolicy", env, verbose=0, ent_coef=config.ENTROPY_COEFFICIENT)
+    modelo = PPO("CnnPolicy", env, verbose=0, ent_coef=config.ENTROPY_COEFFICIENT)
 
 
 print("Iniciando o treinamento (assista a IA errando bastante)...")
